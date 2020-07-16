@@ -39,10 +39,6 @@ func run(log *log.Logger) error {
 			AuthHeaderName string `conf:"default:X-Travel-Auth"`
 			AuthToken      string
 		}
-		Twitter struct {
-			ScreenName string `conf:"default:awefulBrown"`
-			Token      string `conf:"noprint"`
-		}
 	}
 	cfg.Version.SVN = build
 	cfg.Version.Desc = "copyright information here"
@@ -96,11 +92,11 @@ func run(log *log.Logger) error {
 		if err := commands.Schema(gqlConfig); err != nil {
 			return errors.Wrap(err, "updating schema")
 		}
-
-	case "seed":
-		if err := commands.Seed(log, cfg.Twitter.Token, cfg.Twitter.ScreenName); err != nil {
-			return errors.Wrap(err, "seeding database")
-		}
+		// Twitter is no longer needed, saving seed code for use when seeding other data
+	// case "seed":
+	// 	if err := commands.Seed(log, cfg.Twitter.Token, cfg.Twitter.ScreenName); err != nil {
+	// 		return errors.Wrap(err, "seeding database")
+	// 	}
 
 	default:
 		fmt.Println("schema: update the schema in the database")
