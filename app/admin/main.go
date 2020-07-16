@@ -40,7 +40,7 @@ func run(log *log.Logger) error {
 			AuthToken      string
 		}
 		Twitter struct {
-			ScreenName string `conf:"default:goinggodotnet"`
+			ScreenName string `conf:"default:awefulBrown"`
 			Token      string `conf:"noprint"`
 		}
 	}
