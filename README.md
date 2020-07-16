@@ -50,7 +50,7 @@ curl -u ${DGRAPH_TWITTER_API_KEY}:${DGRAPH_TWITTER_SECRET_KEY} \
   'https://api.twitter.com/oauth2/token'
 
 curl --request GET \
-  --url https://api.twitter.com/1.1/friends/ids.json?screen_name=goinggodotnet \
+  --url https://api.twitter.com/1.1/friends/ids.json?screen_name=awefulBrown \
   --header "authorization: bearer ${TWITTER_TOKEN}" \
   --header "content-type: application/json"
 
@@ -60,6 +60,6 @@ curl --request GET \
   --header "content-type: application/json"
 
   curl --request GET \
-  --url https://api.twitter.com/1.1/users/show.json?screen_name=goinggodotnet \
+  --url https://api.twitter.com/1.1/users/show.json?screen_name=awefulBrown \
   --header "authorization: bearer ${TWITTER_TOKEN}" \
   --header "content-type: application/json"
