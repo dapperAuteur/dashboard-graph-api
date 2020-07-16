@@ -22,7 +22,7 @@ type Affix {
     morpheme: String @search(by: [hash])
     note: [String] @search(by: [fulltext, hash])
     tongue: String @search(by: [hash])
-    type: [String]
+    affix_type: [String]
   }
 `
 
