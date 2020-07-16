@@ -14,16 +14,16 @@ import (
 
 // document represents the schema for the project.
 var document = `
-type User {
-	id: ID!
-	source_id: String!
-	source: String!
-	screen_name: String! @search(by: [exact])
-	name: String!
-	location: String
-	friends_count: Int
-	friends: [User]
-}
+type Affix {
+    id: ID!
+    example: [String] @search(by: [hash])
+    meaning: [String] @search(by: [fulltext, hash])
+    media: [String]
+    morpheme: String @search(by: [hash])
+    note: [String] @search(by: [fulltext, hash])
+    tongue: String @search(by: [hash])
+    type: [String]
+  }
 `
 
 // Schema error variables.
