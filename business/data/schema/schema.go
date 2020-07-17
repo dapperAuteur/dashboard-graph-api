@@ -198,7 +198,7 @@ type Person {
     media: [Media] @hasInverse(field: person)
     nickname: [String] @search(by: [hash])
     note: [Note] @hasInverse(field: person)
-    password: String
+    passwordHash: String
     profileImageUrl: Media
     role: Int @search
     tag: [Tag] @hasInverse(field: person)
