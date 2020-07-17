@@ -17,7 +17,8 @@ var document = `
 enum AllowedTerminacion {
     AR
     ER
-    IR
+	IR
+	OR
   }
 
   enum AllowedTypeAffix {
