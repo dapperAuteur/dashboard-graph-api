@@ -200,7 +200,7 @@ type Person {
     note: [Note] @hasInverse(field: person)
     passwordHash: String
     profileImageUrl: Media
-    role: Int @search
+    role: [Int] @search
     tag: [Tag] @hasInverse(field: person)
     transaction: [Transaction] @hasInverse(field: participant)
 }
