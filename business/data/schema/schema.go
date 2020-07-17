@@ -14,15 +14,259 @@ import (
 
 // document represents the schema for the project.
 var document = `
-type Affix {
+enum AllowedTerminacion {
+    AR
+    ER
+    IR
+  }
+
+  enum AllowedTypeAffix {
+    PREFIX
+    PREFIXIOID
+    INFIX
+    CIRCUMFIX
+    INTERFIX
+    DUPLIFIX
+    TRANSFIX
+    SIMULFIX
+    SUPRAFIX
+    DISFIX
+    STEM
+    SUFFIX
+    SUFFIXOID
+    NA
+  }
+
+  enum AllowedTongue {
+    ENGLISH
+    SPANISH
+  }
+
+  enum AllowedCurrency {
+    USD
+    ETHEREUM
+    SPANK
+    BOOTY
+    BITCOIN
+  }
+
+  enum MediaType {
+      AUDIO
+      IMAGE
+      TEXT
+      VIDEO
+  }
+
+  # Types
+
+  type Activity {
+      id: ID!
+      endTime: DateTime @search
+      startTime: DateTime @search
+      media: [Media] @hasInverse(field: activity)
+      name: String @search(by: [hash])
+      note: [Note] @hasInverse(field: activity)
+      person: [Person] @hasInverse(field: activity)
+      tag: [Tag] @hasInverse(field: activity)
+  }
+
+  type Affix {
     id: ID!
     example: [String] @search(by: [hash])
     meaning: [String] @search(by: [fulltext, hash])
-    media: [String]
+    media: [Media] @hasInverse(field: affix)
     morpheme: String @search(by: [hash])
-    note: [String] @search(by: [fulltext, hash])
+    note: [Note] @hasInverse(field: affix)
+    tongue: AllowedTongue @search(by: [exact])
+    type: [AllowedTypeAffix]
+  }
+
+  type BlogPost {
+    id: ID!
+    author: [Person] @hasInverse(field: blogPost)
+    body: String @search(by: [fulltext])
+    comment: [Comment] @hasInverse(field: blogPost)
+    media: [Media] @hasInverse(field: blogPost)
+    note: [Note] @hasInverse(field: blogPost)
+    publishDate: DateTime @search
+    published: Boolean
+    tag: [Tag] @hasInverse(field: blogPost)
+    title: String! @search(by: [hash])
+  }
+
+  type Budget {
+    id: ID!
+    budgetName: String! @search(by: [hash])
+    budgetValue: Float @search
+    media: [Media] @hasInverse(field: budget)
+    note: [Note] @hasInverse(field: budget)
+    partner: [Person] @hasInverse(field: budget)
+    tag: [Tag] @hasInverse(field: budget)
+    transaction: [Transaction] @hasInverse(field: budget)
+  }
+
+  type Comment {
+    id: ID!
+    author: [Person] @hasInverse(field: comment)
+    blogPost: [BlogPost] @hasInverse(field: comment)
+    body: String @search(by: [fulltext])
+    comment: [Comment] @hasInverse(field: comment)
+    media: [Media] @hasInverse(field: comment)
+    note: [Note] @hasInverse(field: comment)
+    publishDate: DateTime @search
+    published: Boolean
+    tag: [Tag] @hasInverse(field: comment)
+}
+
+  type FinancialAccount {
+    id: ID!
+    accountName: String! @search(by: [hash])
+    currentValue: Float @search
+    media: [Media] @hasInverse(field: financialAccount)
+    note: [Note] @hasInverse(field: financialAccount)
+    owner: [Person] @hasInverse(field: financialAccount)
+    tag: [Tag] @hasInverse(field: financialAccount)
+    transaction: [Transaction] @hasInverse(field: financialAccount)
+  }
+
+  type Game {
+    id: ID!
+    attempts: Int @search
+    bulls: Int @search
+    cows: Int @search
+    guess: [String]
+    note: [Note] @hasInverse(field: game)
+    player: [Person] @hasInverse(field: game)
+    score: Int @search
+    tag: [Tag] @hasInverse(field: game)
+    winningWord: String @search(by: [hash])
+    won: Boolean
+  }
+
+  type Media {
+    id: ID!
+    activity: [Activity] @hasInverse(field: media)
+    affix: [Affix] @hasInverse(field: media)
+    blogPost: [BlogPost] @hasInverse(field: media)
+    budget: [Budget] @hasInverse(field: media)
+    comment: [Comment] @hasInverse(field: media)
+    financialAccount: [FinancialAccount] @hasInverse(field: media)
+    link: String
+    note: [Note] @hasInverse(field: media)
+    occurrance: DateTime @search
+    person: [Person] @hasInverse(field: media)
+    tag: [Tag] @hasInverse(field: media)
+    transaction: [Transaction] @hasInverse(field: media)
+    type: MediaType
+    vendor: [Vendor] @hasInverse(field: media)
+    verbo: [Verbo] @hasInverse(field: media)
+    word: [Word] @hasInverse(field: media)
+}
+
+type Note {
+    id: ID!
+    activity: Activity @hasInverse(field: note)
+    affix: [Affix] @hasInverse(field: note)
+    blogPost: BlogPost @hasInverse(field: note)
+    budget: Budget @hasInverse(field: note)
+    comment: Comment @hasInverse(field: note)
+    financialAccount: FinancialAccount @hasInverse(field: note)
+    game: Game @hasInverse(field: note)
+    media: Media @hasInverse(field: note)
+    note: String @search(by: [term])
+    person: Person @hasInverse(field: note)
+    tag: Tag @hasInverse(field: note)
+    transaction: Transaction @hasInverse(field: note)
+    vendor: Vendor @hasInverse(field: note)
+    verbo: Verbo @hasInverse(field: note)
+    word: Word @hasInverse(field: note)
+}
+
+type Person {
+    id: ID!
+    activity: [Activity] @hasInverse(field: person)
+    associate: [Person] @hasInverse(field: associate)
+    blogPost: [BlogPost] @hasInverse(field: author)
+    budget: [Budget] @hasInverse(field: partner)
+    comment: [Comment] @hasInverse(field: author)
+    email: String @search(by: [hash])
+    financialAccount: [FinancialAccount] @hasInverse(field: owner)
+    game: [Game] @hasInverse(field: player)
+    guess: [String]
+    isUser: Boolean
+    media: [Media] @hasInverse(field: person)
+    nickname: [String] @search(by: [hash])
+    note: [Note] @hasInverse(field: person)
+    password: String
+    profileImageUrl: Media
+    role: Int @search
+    tag: [Tag] @hasInverse(field: person)
+    transaction: [Transaction] @hasInverse(field: participant)
+}
+
+  type Tag {
+    id: ID!
+    activity: [Activity] @hasInverse(field: tag)
+    blogPost: [BlogPost] @hasInverse(field: tag)
+    budget: [Budget] @hasInverse(field: tag)
+    comment: [Comment] @hasInverse(field: tag)
+    financialAccount: [FinancialAccount] @hasInverse(field: tag)
+    game: [Game] @hasInverse(field: tag)
+    media: [Media] @hasInverse(field: tag)
+    note: [Note] @hasInverse(field: tag)
+    person: [Person] @hasInverse(field: tag)
+    tagName: String @search(by: [hash])
+    transaction: [Transaction] @hasInverse(field: tag)
+    vendor: [Vendor] @hasInverse(field: tag)
+  }
+
+  type Transaction {
+    id: ID!
+    budget: [Budget] @hasInverse(field: transaction)
+    currency: AllowedCurrency @search(by: [hash])
+    financialAccount: [FinancialAccount] @hasInverse(field: transaction)
+    media: [Media] @hasInverse(field: transaction)
+    note: [Note] @hasInverse(field: transaction)
+    occurrence: DateTime @search
+    participant: [Person] @hasInverse(field: transaction)
+    tag: [Tag] @hasInverse(field: transaction)
+    transactionEvent: String @search(by: [hash])
+  }
+
+  type Vendor {
+    id: ID!
+    media: [Media] @hasInverse(field: vendor)
+    note: [Note] @hasInverse(field: vendor)
+    tag: [Tag] @hasInverse(field: vendor)
+    vendorName: String @search(by: [hash])
+  }
+
+  type Verbo {
+    id: ID!
+    cambiar_de_irregular: String @search(by: [hash])
+    categoria_de_irregular: String @search(by: [hash])
+    english: String @search(by: [hash])
+    spanish: String @search(by: [hash])
+    grupo: Float @search
+    irregular: Boolean
+    reflexive: Boolean
+    media: [Media] @hasInverse(field: verbo)
+    note: [Note] @hasInverse(field: verbo)
+    terminacion: AllowedTerminacion @search(by: [exact])
+  }
+
+  type Word {
+    id: ID!
+    definition: String @search(by: [fulltext])
+    f_points: Int @search
+    s_points: Int @search
+    in_game: Boolean
+    isFourLetterWord: Boolean
+    media: [Media] @hasInverse(field: word)
+    note: [Note] @hasInverse(field: word)
+    tier: Int @search
     tongue: String @search(by: [hash])
-    affix_type: [String]
+    word: String @search(by: [hash])
   }
 `
 
