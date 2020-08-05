@@ -233,6 +233,7 @@ type Person {
     tag: [Tag] @hasInverse(field: transaction)
     transactionEvent: String @search(by: [hash])
     transactionValue: Float @search
+    vendor: Vendor @hasInverse(field: transaction)
   }
 
   type Vendor {
@@ -240,6 +241,7 @@ type Person {
     media: [Media] @hasInverse(field: vendor)
     note: [Note] @hasInverse(field: vendor)
     tag: [Tag] @hasInverse(field: vendor)
+    transaction: Transaction @hasInverse(field: vendor)
     vendorName: String @search(by: [hash])
   }
 
